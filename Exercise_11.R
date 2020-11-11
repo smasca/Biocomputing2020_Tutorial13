@@ -3,28 +3,35 @@
 # Exercise 11
 # TA: Elizabeth Brooks
 
-rN <- 0.1 # drug absent growth rate
-rM <- 0.05
-K <- 1000000
+rN <- 0.1
+rM <- 0.1 
+K <- 1000000 # carrying capacity 
 
-times <- 1:300
+rND <- -0.1 # cancer drug present, non-mutant 
+rMD <- 0.05 # cancer drug present, mutant 
 
-# for non-treated population
+times <- 1:500
+
 Ns <- matrix(data=NA, nrow=length(times), ncol=2)
 Ns[,1] <- times
 Ns[1,2] <- 2
 
-# for treated population
 Ms <- matrix(data=NA, nrow=length(times), ncol=2)
 Ms[,1] <- times 
 Ms[1,2] <- 2
 
-for(i in times[-1]){
-  Ns[i,2] <- Ns[(i-1),2]+rN*Ns[(i-1),2]*(1-(Ns[(i-1),2]+Ms[(i-1),2])/K)
-}
 
+
+# growth rate with mutation at 100 cells
 for(i in times[-1]){
-  Ms[i,2] <- Ms[(i-1),2]+rM*Ms[(i-1),2]*(1-(Ns[(i-1),2]+Ms[(i-1),2])/K)
+  if(Ns[,2] < 100) {
+    Ns[i,2] <- Ns[(i-1),2]+rN*Ns[(i-1),2]*(1-(Ns[(i-1),2]+Ms[(i-1),2])/K)
+    Ms[i,2] <- Ms[(i-1),2]+rM*Ms[(i-1),2]*(1-(Ns[(i-1),2]+Ms[(i-1),2])/K) 
+  }
+  else {
+    Ns[i,2] <- Ns[(i-1),2]+rND*Ns[(i-1),2]*(1-(Ns[(i-1),2]+Ms[(i-1),2])/K)
+    Ms[i,2] <- Ms[(i-1),2]+rMD*Ms[(i-1),2]*(1-(Ns[(i-1),2]+Ms[(i-1),2])/K)
+  }
 }
 
 
